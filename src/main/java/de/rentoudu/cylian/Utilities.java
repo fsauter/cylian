@@ -46,8 +46,7 @@ public class Utilities {
 	}
 	
 	public static String getBookmarkId(String playerName, String bookmarkName) {
-		String id = playerName + ";" + bookmarkName;
-		return String.valueOf(id.hashCode());
+		return playerName + "|" + bookmarkName;
 	}
 	
 	public static Double parseDouble(String string) {

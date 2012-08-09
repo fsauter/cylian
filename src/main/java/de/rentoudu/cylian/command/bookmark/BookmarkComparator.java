@@ -6,7 +6,6 @@ import de.rentoudu.cylian.entity.Bookmark;
 
 public class BookmarkComparator implements Comparator<Bookmark> {
 
-	@Override
 	public int compare(Bookmark o1, Bookmark o2) {
 		int result = o1.getWorld().compareTo(o2.getWorld());
 	    

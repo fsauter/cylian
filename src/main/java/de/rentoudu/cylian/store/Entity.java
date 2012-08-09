@@ -1,21 +1,13 @@
-package de.rentoudu.cylian.config;
+package de.rentoudu.cylian.store;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
-/**
- * 
- * @author Florian Sauter
- */
-public class ConfigurationEntity {
+public class Entity {
 
 	private Map<String, Object> properties;
 	
-	public ConfigurationEntity() {
+	public Entity() {
 		properties = new HashMap<String, Object>();
 	}
 	
@@ -25,10 +17,6 @@ public class ConfigurationEntity {
 	
 	public String getId() {
 		return get("id");
-	}
-	
-	public String getIdHash() {
-		return String.valueOf(get("id").hashCode());
 	}
 
 	public void setProperty(String name, String value) {
@@ -53,21 +41,6 @@ public class ConfigurationEntity {
 	
 	public void setProperties(HashMap<String, Object> properties) {
 		this.properties = properties;
-	}
-	
-	public static ConfigurationEntity fromElement(Element element) {
-		ConfigurationEntity entity = new ConfigurationEntity();
-		
-		NamedNodeMap attributeMap = element.getAttributes();
-		
-		for(int i = 0; i < attributeMap.getLength(); i++) {
-			Node node = attributeMap.item(i);
-			String nodeName = node.getNodeName();
-			String nodeValue = node.getNodeValue();
-			entity.setProperty(nodeName, nodeValue);
-		}
-
-		return entity;
 	}
 	
 }

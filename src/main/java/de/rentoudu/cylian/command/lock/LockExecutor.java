@@ -5,7 +5,8 @@ import org.bukkit.entity.Player;
 
 import de.rentoudu.cylian.Utilities;
 import de.rentoudu.cylian.command.DefaultCommandExecutor;
-import de.rentoudu.cylian.config.CylianStorage;
+import de.rentoudu.cylian.store.EntityStore;
+import de.rentoudu.cylian.store.EntityStoreProvider;
 import de.rentoudu.cylian.entity.LockState;
 
 /**
@@ -15,10 +16,10 @@ import de.rentoudu.cylian.entity.LockState;
  */
 public class LockExecutor extends DefaultCommandExecutor {
 
-	private final CylianStorage storage;
+	private final EntityStore storage;
 	
 	public LockExecutor() {
-		storage = CylianStorage.getInstance();
+		storage = EntityStoreProvider.provide();
 	}
 	
 	@Override

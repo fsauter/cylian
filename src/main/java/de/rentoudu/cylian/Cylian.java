@@ -1,6 +1,5 @@
 package de.rentoudu.cylian;
 
-import java.io.File;
 import java.util.logging.Logger;
 
 import org.bukkit.command.Command;
@@ -17,7 +16,7 @@ import de.rentoudu.cylian.command.lock.LockExecutor;
 import de.rentoudu.cylian.command.lock.UnlockExecutor;
 import de.rentoudu.cylian.command.mode.GameModeExecutor;
 import de.rentoudu.cylian.command.spawn.SpawnExecutor;
-import de.rentoudu.cylian.config.CylianStorage;
+import de.rentoudu.cylian.store.EntityStoreProvider;
 
 /**
  * The Cylian mod entry point.
@@ -30,7 +29,7 @@ public class Cylian extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		CylianStorage.initialize(new File(getDataFolder(), "entities.yml"));
+		EntityStoreProvider.initialize(getDataFolder());
 		
 		getCommand("mode").setExecutor(new GameModeExecutor());
 		getCommand("unlock").setExecutor(new UnlockExecutor());
@@ -60,7 +59,7 @@ public class Cylian extends JavaPlugin {
 	
 	@Override
 	public void saveConfig() {
-		CylianStorage.getInstance().save();
+		EntityStoreProvider.provide().save();
 		super.saveConfig();
 	}
 	

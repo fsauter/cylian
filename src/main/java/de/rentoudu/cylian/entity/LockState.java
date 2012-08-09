@@ -1,8 +1,8 @@
 package de.rentoudu.cylian.entity;
 
-import de.rentoudu.cylian.config.ConfigurationEntity;
+import de.rentoudu.cylian.store.Entity;
 
-public class LockState extends ConfigurationEntity {
+public class LockState extends Entity {
 	
 	public void setOwner(String owner) {
 		set("owner", owner);

@@ -3,9 +3,9 @@ package de.rentoudu.cylian.entity;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import de.rentoudu.cylian.config.ConfigurationEntity;
+import de.rentoudu.cylian.store.Entity;
 
-public class Bookmark extends ConfigurationEntity {
+public class Bookmark extends Entity {
 	
 	public String getName() {
 		return get("name");

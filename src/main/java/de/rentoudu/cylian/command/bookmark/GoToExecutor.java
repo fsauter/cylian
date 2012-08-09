@@ -7,8 +7,9 @@ import org.bukkit.entity.Player;
 
 import de.rentoudu.cylian.Utilities;
 import de.rentoudu.cylian.command.DefaultCommandExecutor;
-import de.rentoudu.cylian.config.CylianStorage;
 import de.rentoudu.cylian.entity.Bookmark;
+import de.rentoudu.cylian.store.EntityStore;
+import de.rentoudu.cylian.store.EntityStoreProvider;
 
 /**
  * 
@@ -16,12 +17,12 @@ import de.rentoudu.cylian.entity.Bookmark;
  */
 public class GoToExecutor extends DefaultCommandExecutor {
 
-	private final CylianStorage storage;
+	private final EntityStore storage;
 	private final Server server;
 	
 	public GoToExecutor(Server server) {
 		this.server = server;
-		this.storage = CylianStorage.getInstance();
+		this.storage = EntityStoreProvider.provide();
 	}
 	
 	@Override
@@ -32,7 +33,7 @@ public class GoToExecutor extends DefaultCommandExecutor {
 		String playerName = player.getName();
 		
 		if(args.length >= 1) {
-			bookmarkName = args[0];
+			bookmarkName = args[0].toLowerCase();
 		}
 		
 		if(args.length == 2) {

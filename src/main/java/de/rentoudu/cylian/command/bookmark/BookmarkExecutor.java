@@ -7,8 +7,9 @@ import org.bukkit.entity.Player;
 
 import de.rentoudu.cylian.Utilities;
 import de.rentoudu.cylian.command.DefaultCommandExecutor;
-import de.rentoudu.cylian.config.CylianStorage;
 import de.rentoudu.cylian.entity.Bookmark;
+import de.rentoudu.cylian.store.EntityStore;
+import de.rentoudu.cylian.store.EntityStoreProvider;
 
 /**
  * 
@@ -17,10 +18,10 @@ import de.rentoudu.cylian.entity.Bookmark;
  */
 public class BookmarkExecutor extends DefaultCommandExecutor {
 
-	private final CylianStorage storage;
+	private final EntityStore storage;
 	
 	public BookmarkExecutor() {
-		storage = CylianStorage.getInstance();
+		this.storage = EntityStoreProvider.provide();
 	}
 	
 	@Override
@@ -36,7 +37,7 @@ public class BookmarkExecutor extends DefaultCommandExecutor {
 		if("add".equals(action)) {
 			
 			if(args.length == 2) {
-				String bookmarkName = args[1];
+				String bookmarkName = args[1].toLowerCase();
 				Bookmark bookmark = Bookmark.fromLocation(player.getLocation());
 				bookmark.setId(Utilities.getBookmarkId(player.getName(), bookmarkName));
 				bookmark.set("name", bookmarkName);
@@ -51,7 +52,7 @@ public class BookmarkExecutor extends DefaultCommandExecutor {
 		else if("remove".equals(action)) {
 			
 			if(args.length == 2) {
-				String bookmarkName = args[1];
+				String bookmarkName = args[1].toLowerCase();
 				boolean deleted = storage.delete(Bookmark.class, Utilities.getBookmarkId(player.getName(), bookmarkName));
 				
 				if(deleted) {
@@ -80,7 +81,8 @@ public class BookmarkExecutor extends DefaultCommandExecutor {
 				// Show all items if its me, otherwise only public items.
 				if((player.getName().equals(playerName) || (player.getName().equals(playerName) == false && bookmark.isPublic())) && player.getWorld().getName().equals(bookmark.getWorld())) {
 					String visibility = bookmark.isPublic() ? "+" : "-";
-					Utilities.sendMessage(player,  "[" + bookmark.getWorld() + "][" + visibility + "] " + bookmark.getName());
+					String world = bookmark.getWorld().replace("world_", ""); // Dirty quick hack.
+					Utilities.sendMessage(player,  "[" + world + "][" + visibility + "] " + bookmark.getName());
 					hasBookmark = true;
 				}
 			}
@@ -94,7 +96,7 @@ public class BookmarkExecutor extends DefaultCommandExecutor {
 		else if("share".equals(action) || "hide".equals(action)) {
 			
 			if(args.length == 2) {
-				String bookmarkName = args[1];
+				String bookmarkName = args[1].toLowerCase();
 				Bookmark bookmark = storage.get(Bookmark.class, Utilities.getBookmarkId(player.getName(), bookmarkName));
 				
 				if(bookmark == null) {
