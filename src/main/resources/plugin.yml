@@ -40,6 +40,11 @@ commands:
     usage: |
       /goto [bookmarkName] This command teleports you to a previously created bookmark.
       /goto [bookmarkName] [playerName] Teleports you to a bookmark of another player, as long as the bookmark is public (@see /bookmark [share|hide]).
+  tpto:
+    aliases: tt
+    description: Teleport yourself to the provided player name.
+    usage: |
+      /tpto [playerName] This command teleports you to the passed player.
 permissions:
   cylian.bookmark.*:
     description: Give access to all bookmark commands.
@@ -64,4 +69,7 @@ permissions:
     default: op
   cylian.compass.*:
     description: Give access to the compass teleport action.
+    default: op
+  cylian.tpto.*:
+    description: Give access to the tpto teleport action.
     default: op

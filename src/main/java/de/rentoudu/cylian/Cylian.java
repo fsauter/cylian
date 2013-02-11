@@ -16,6 +16,7 @@ import de.rentoudu.cylian.command.lock.LockExecutor;
 import de.rentoudu.cylian.command.lock.UnlockExecutor;
 import de.rentoudu.cylian.command.mode.GameModeExecutor;
 import de.rentoudu.cylian.command.spawn.SpawnExecutor;
+import de.rentoudu.cylian.command.teleport.TeleportToExecutor;
 import de.rentoudu.cylian.store.EntityStoreProvider;
 
 /**
@@ -38,7 +39,8 @@ public class Cylian extends JavaPlugin {
 		getCommand("goto").setExecutor(new GoToExecutor(getServer()));
 		getCommand("spawn").setExecutor(new SpawnExecutor());
 		getCommand("clock").setExecutor(new ClockExecutor());
-		
+		getCommand("tpto").setExecutor(new TeleportToExecutor());			
+
 		log.info("[Cylian] " + getPluginName() + " version " + getPluginVerion()
 				+ " is now enabled.");
 		
