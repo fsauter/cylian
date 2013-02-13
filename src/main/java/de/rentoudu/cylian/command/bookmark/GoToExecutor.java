@@ -30,20 +30,20 @@ public class GoToExecutor extends DefaultCommandExecutor {
 		boolean executed = false;
 		
 		String bookmarkName = "";
-		String playerName = player.getName();
+		String playerName = player.getName().toLowerCase();
 		
 		if(args.length >= 1) {
-			bookmarkName = args[0].toLowerCase();
+			bookmarkName = args[0];
 		}
 		
 		if(args.length == 2) {
-			playerName = args[1];
+			playerName = args[1].toLowerCase();
 		}
 		
 		if(bookmarkName.isEmpty() == false) {
-			Bookmark bookmark = storage.get(Bookmark.class, Utilities.getBookmarkId(playerName, bookmarkName));
+			Bookmark bookmark = storage.query().with("owner", playerName).with("name", bookmarkName).get(Bookmark.class);
 			
-			if(bookmark == null || (player.getName().equals(playerName) == false && bookmark.isPrivate())) {
+			if(bookmark == null || (player.getName().equalsIgnoreCase(playerName) == false && bookmark.isPrivate())) {
 				Utilities.sendMessage(player, "The bookmark '" + bookmarkName + "' could not be found.");
 			} else {
 				World world = server.getWorld(bookmark.getWorld());
@@ -56,11 +56,6 @@ public class GoToExecutor extends DefaultCommandExecutor {
 		}
 		
 		return executed;
-	}
-	
-	@Override
-	public String getPermissionName() {
-		return "cylian.goto.*";
 	}
 
 }

@@ -5,18 +5,19 @@ import java.util.Map;
 
 public class Entity {
 
+	private String id;
 	private Map<String, Object> properties;
 	
 	public Entity() {
 		properties = new HashMap<String, Object>();
 	}
 	
-	public void setId(String id) {
-		set("id", id);
+	protected void setId(String id) {
+		this.id = id;
 	}
 	
 	public String getId() {
-		return get("id");
+		return id;
 	}
 
 	public void setProperty(String name, String value) {

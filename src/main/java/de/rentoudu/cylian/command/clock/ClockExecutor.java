@@ -37,10 +37,4 @@ public class ClockExecutor extends DefaultCommandExecutor {
 		}
 		return false;
 	}
-
-	@Override
-	public String getPermissionName() {
-		return "cylian.clock.*";
-	}
-
 }

@@ -4,7 +4,7 @@
 	<groupId>de.rentoudu.cylian</groupId>
 	<artifactId>cylian</artifactId>
 	<packaging>jar</packaging>
-	<version>0.3.5-SNAPSHOT</version>
+	<version>0.4-SNAPSHOT</version>
 	<name>cylian</name>
 	<url>http://dev.bukkit.org/server-mods/cylian/</url>
 
@@ -24,13 +24,14 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<build>
 		<plugins>
+		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -40,6 +41,16 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<outputDirectory>/home/flori/server/minecraft/plugins</outputDirectory>
+				</configuration>
+			</plugin>
+			
 		</plugins>
 	</build>
 

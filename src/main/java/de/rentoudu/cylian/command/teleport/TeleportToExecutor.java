@@ -22,14 +22,15 @@ public class TeleportToExecutor extends DefaultCommandExecutor {
 				
 				Player otherPlayer = findPlayer(player.getWorld(), playerName);
 				
+				suceeded = true;
+				
 				// Check if passed player exists.
 				if(otherPlayer == null) {
-					Utilities.sendMessage(player.getServer(), "Player was not found: " + playerName);
+					Utilities.broadcastMessage(player.getServer(), "The player '" + playerName + "' was not found.");
 				} else {
 					// Teleport player.
-					Utilities.sendMessage(player.getServer(), "Teleported to: " + playerName);
+					Utilities.broadcastMessage(player.getServer(), "Teleported to " + playerName + ".");
 					player.teleport(otherPlayer);
-					suceeded = true;
 				}
 				
 			}
@@ -41,16 +42,10 @@ public class TeleportToExecutor extends DefaultCommandExecutor {
 	
 	private Player findPlayer(World world, String playerNamer) {
 		for(Player player : world.getPlayers()) {
-			if( playerNamer.equals(player.getName()) ) {
+			if(playerNamer.toLowerCase().equals(player.getName().toLowerCase())) {
 				return player;
 			}
 		}
 		return null;
 	}
-
-	@Override
-	public String getPermissionName() {
-		return "cylian.tpto.*";
-	}
-
 }

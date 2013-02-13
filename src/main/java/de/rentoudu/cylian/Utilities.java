@@ -1,9 +1,12 @@
 package de.rentoudu.cylian;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 /**
@@ -17,18 +20,26 @@ public class Utilities {
 		String[] s = message.split("\n");
 		for(String m : s) {
 			if(m != null && m.length() > 0) {
-				player.sendMessage(ChatColor.RED + "[SERVER]" + ChatColor.WHITE + " " + m);
+				player.sendMessage(ChatColor.RED + "[SERVER] " + ChatColor.WHITE + m);
 			}
 		}
 	}
 	
-	public static void sendMessage(Server server, String message) {
+	public static void broadcastMessage(Server server, String message) {
 		String[] s = message.split("\n");
 		for(String m : s) {
 			if(m != null && m.length() > 0) {
-				server.broadcastMessage(ChatColor.RED + "[SERVER]" + ChatColor.WHITE + " " + m);
+				server.broadcastMessage(ChatColor.YELLOW + "[SERVER] " + ChatColor.WHITE + m);
 			}
 		}
+	}
+	
+	public static void broadcastNews(Server server, String message) {
+		server.broadcastMessage(ChatColor.GREEN + "[NEWS] " + ChatColor.WHITE + message);
+	}
+	
+	public static void sendNews(Player player, String message) {
+		player.sendMessage(ChatColor.GREEN + "[NEWS] " + ChatColor.WHITE + message);
 	}
 	
 	public static Location copyLocation(Location location) {
@@ -39,14 +50,6 @@ public class Utilities {
 				location.getZ()
 		);
 		return locationCopy;
-	}
-	
-	public static String getBlockId(Block block) {
-		return block.getWorld().getName() + "|" + block.getX() + "|" + block.getY() + "|" + block.getZ();
-	}
-	
-	public static String getBookmarkId(String playerName, String bookmarkName) {
-		return playerName + "|" + bookmarkName;
 	}
 	
 	public static Double parseDouble(String string) {
@@ -87,4 +90,13 @@ public class Utilities {
 		return implodedString;
 	}
 
+	/**
+	 * @return the current date.
+	 */
+	public static String getNow() {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd H:m");
+		Date date = new Date();
+		return dateFormat.format(date);
+	}
+	
 }

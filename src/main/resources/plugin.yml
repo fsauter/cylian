@@ -1,35 +1,54 @@
 name: Cylian
 main: de.rentoudu.cylian.Cylian
-version: 0.3.5
+version: 0.4
 author: Espher
 website: http://dev.bukkit.org/server-mods/cylian/
 description: >
              This lightweight minecraft server mod provides useful commands for a better minecraft experience.
+
 commands:
+
   mode:
     description: Shortcut to set the game mode for the current player.
+    permission: cylian.mode.*
     usage: /mode [1|creative, 0|survival]
-  lock:
-    description: Locks a chest. You must stand directly in front of the chest. Other players will not be able to open/destory the chest until it is unlocked by it's owner (@see /unlock). Ops, can lock chests on behalf of others passing the player name as a second argument.
-    usage: /lock [playerName]
-  unlock:
-    description: Unlocks a chest. You must stand directly in front of the chest. Ops, can unlock chests on behalf of others passing the player name as a second argument.
-    usage: /unlock [playerName]
+
   spawn:
     description: Sets the server spawn point to players' location.
+    permission: cylian.spawn.*
     usage: |
       /spawn set Sets the server spawn point to players' location.
-      /spawn tp  Teleports the player to the spawn point location.
+      /spawn tp Teleports the player to the spawn point location.
       /spawn display Displays the location of the current server spawn point.
+
   clock:
-    description: Set the world time.
     aliases: t
+    description: Set the world time.
+    permission: cylian.clock.*
     usage: |
       /clock [dawn|midday|dusk|midnight|number]
       /t [dawn|midday|dusk|midnight|number]
+
+  tpto:
+    aliases: tt
+    description: Teleport yourself to the provided player name.
+    permission: cylian.tpto.*
+    usage: |
+      /tpto [playerName] This command teleports you to the passed player.
+
+  lock:
+    description: Locks a chest. Other players will not be able to open/destory the chest until it is unlocked by it's owner or an op (@see /unlock).
+    permission: cylian.lock.*
+    usage: /lock
+  unlock:
+    description: Unlocks a chest. You must stand directly in front of the chest. Ops, can unlock chests on behalf of others.
+    permission: cylian.unlock.*
+    usage: /unlock
+
   bookmark:
     aliases: bm
     description: Bookmark system.
+    permission: cylian.bookmark.*
     usage: |
       /bookmark [add|remove] [bookmarkName] Creates or removes a bookmark based on the passed name (lower case).
       /bookmark list Lists all your previously created bookmarks.
@@ -37,39 +56,67 @@ commands:
   goto:
     aliases: gt
     description: Teleport yourself to a previously created bookmark. You can specify a player name as second argument to use a public bookmark.
+    permission: cylian.goto.*
     usage: |
       /goto [bookmarkName] This command teleports you to a previously created bookmark.
       /goto [bookmarkName] [playerName] Teleports you to a bookmark of another player, as long as the bookmark is public (@see /bookmark [share|hide]).
-  tpto:
-    aliases: tt
-    description: Teleport yourself to the provided player name.
+
+  news:
+    description: News system.
+    permission: cylian.news.*
     usage: |
-      /tpto [playerName] This command teleports you to the passed player.
+      /news Shows news.
+      /news add [message]
+      /news remove [id] Only ops can see the message id using the list command.
+      /news broadcast Broadcast news to every player on the server.
+
 permissions:
+
   cylian.bookmark.*:
     description: Give access to all bookmark commands.
     default: true
+
   cylian.lock.*:
     description: Give access to all lock commands.
     default: true
+
   cylian.unlock.*:
     description: Give access to the unlock command.
     default: true
+
   cylian.goto.*:
     description: Give access to the goto command.
     default: true
+
   cylian.mode.*:
     description: Give access to the mode command.
     default: op
+
   cylian.spawn.*:
     description: Give access to the spawn command.
     default: op
+
   cylian.clock.*:
     description: Give access to the clock command.
     default: op
+
   cylian.compass.*:
     description: Give access to the compass teleport action.
     default: op
+
   cylian.tpto.*:
-    description: Give access to the tpto teleport action.
+    description: Give access to the tpto teleport command.
+    default: op
+
+  cylian.news.*:
+    description: Give access to the news command.
+    default: true
+  cylian.news.add:
+    description: Give access to the news add command.
+    default: op
+  cylian.news.remove:
+    description: Give access to the news remove command.
+    default: op
+  cylian.news.broadcast:
+    description: Give access to the news broadcast command.
     default: op

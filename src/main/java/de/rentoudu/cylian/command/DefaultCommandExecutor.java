@@ -5,33 +5,38 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import de.rentoudu.cylian.Utilities;
-
 /**
- * Checks permissions.
+ * Default command executor.
  * 
  * @author Florian Sauter
  */
 public abstract class DefaultCommandExecutor implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		Player player = (Player) sender;
 		
-		if(getPermissionName() != null && getPermissionName().isEmpty() == false && player.hasPermission(getPermissionName()) == false) {
-			Utilities.sendMessage(player, "You are not authorized to perform this action.");
-			return true;
-		} else {
-			return onCommand(player, args);
-		}
+		if(sender instanceof Player) {
+			Player player = (Player) sender;
+			
+			try {
+				return onCommand(player, args);
+			} catch(MissingArgumentException exception) {
+				return false;
+			}
 
+		} else {
+			return false;
+		}
+		
 	}
 	
-	/**
-	 * Return null or an empty string if you want to skip the permission check.
-	 * 
-	 * @return the general permission name.
-	 */
-	public abstract String getPermissionName();
+	public boolean isAction(String action, String[] args) {
+		return args.length >= 1 && action.equals(args[0]);
+	}
+	
+	public String getActionArgument(String[] args, int index) {
+		return args.length >= index + 1 ? args[index] : "";
+	}
+
 	public abstract boolean onCommand(Player player, String[] args);
 	
 }

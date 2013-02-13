@@ -29,10 +29,5 @@ public class GameModeExecutor extends DefaultCommandExecutor {
 			Utilities.sendMessage(player, "Now entering " + ChatColor.GOLD + "survival mode.");
 		}
 	}
-	
-	@Override
-	public String getPermissionName() {
-		return "cylian.mode.*";
-	}
 
 }

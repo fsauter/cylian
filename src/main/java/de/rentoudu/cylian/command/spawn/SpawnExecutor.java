@@ -19,7 +19,7 @@ public class SpawnExecutor extends DefaultCommandExecutor {
 				player.getWorld().setSpawnLocation(player.getLocation().getBlockX(),
 					player.getLocation().getBlockY(),
 					player.getLocation().getBlockZ());
-				Utilities.sendMessage(player.getServer(), "Spawn location was set to: " + player.getLocation().toString());
+				Utilities.broadcastMessage(player.getServer(), "Spawn location was set to: " + player.getLocation().toString());
 				
 			} else if("tp".equals(action)) {
 				player.teleport(player.getWorld().getSpawnLocation());
@@ -35,10 +35,4 @@ public class SpawnExecutor extends DefaultCommandExecutor {
 		return true;
 		
 	}
-
-	@Override
-	public String getPermissionName() {
-		return "cylian.spawn.*";
-	}
-
 }

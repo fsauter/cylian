@@ -23,6 +23,18 @@ public class Bookmark extends Entity {
 		return "0".equals(get("public"));
 	}
 	
+	public String getX() {
+		return get("x");
+	}
+	
+	public String getY() {
+		return get("y");
+	}
+	
+	public String getZ() {
+		return get("z");
+	}
+	
 	public static Bookmark fromLocation(Location location) {
 		Bookmark bookmark = new Bookmark();
 		bookmark.set("world", location.getWorld().getName());

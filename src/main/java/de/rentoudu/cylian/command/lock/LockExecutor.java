@@ -27,37 +27,30 @@ public class LockExecutor extends DefaultCommandExecutor {
 		Block targetBlock = player.getTargetBlock(null, 1);
 
 		if(ChestUtilities.isChest(targetBlock)) {
-			String playerName = player.getName();
+			LockState previousLockState = ChestUtilities.getLockState(targetBlock);
 			
-			if(args.length == 1 && player.isOp()) { // allow the op to specify a user name.
-				playerName = args[0];
-			}
-			
-			String ownerName = ChestUtilities.getChestLockOwner(targetBlock);
-			
-			if(ownerName != null) {
-				// Wrong owner, send error message.
-				Utilities.sendMessage(player, "Chest is already locked for " + ownerName + ".");
-			} else if (targetBlock != null) {
+			if(previousLockState == null) {
+				
 				// No lock, add one.
-				String blockId = Utilities.getBlockId(targetBlock);
-				LockState lockState = new LockState();
-				lockState.setId(blockId);
-				lockState.setOwner(playerName);
+				LockState lockState = LockState.fromBlock(player, targetBlock);
 				storage.put(lockState);
-				Utilities.sendMessage(player, "Locked chest for " + playerName + ".");
-			} else {
-				Utilities.sendMessage(player, "Invalid block.");
+				Utilities.sendMessage(player, "This chest was locked by you.");
+				
+			} else{
+				
+				// Already locked, send error message.
+				if(player.isOp()) {
+					Utilities.sendMessage(player, "Chest is already locked by " + previousLockState.getOwner() + ".");
+				} else {
+					Utilities.sendMessage(player, "Chest is already locked.");
+				}
+				
 			}
 			
+		} else {
+			Utilities.sendMessage(player, "You've to stay in front of a chest.");
 		}
 		
 		return true;
 	}
-
-	@Override
-	public String getPermissionName() {
-		return "cylian.lock.*";
-	}
-
 }

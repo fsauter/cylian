@@ -37,23 +37,33 @@ public class BookmarkExecutor extends DefaultCommandExecutor {
 		if("add".equals(action)) {
 			
 			if(args.length == 2) {
-				String bookmarkName = args[1].toLowerCase();
-				Bookmark bookmark = Bookmark.fromLocation(player.getLocation());
-				bookmark.setId(Utilities.getBookmarkId(player.getName(), bookmarkName));
-				bookmark.set("name", bookmarkName);
-				bookmark.set("owner", player.getName());
-				bookmark.set("public", "0");
-				storage.put(bookmark);
-				Utilities.sendMessage(player, "The bookmark '" + bookmarkName + "' has been added.");
-				executed = true;
+				String bookmarkName = args[1];
+				
+				Bookmark previousBookmark = findBookmark(player, bookmarkName);
+				
+				if(previousBookmark == null) {
+					Bookmark bookmark = Bookmark.fromLocation(player.getLocation());
+					bookmark.set("name", bookmarkName);
+					bookmark.set("owner", player.getName().toLowerCase());
+					bookmark.set("public", "0");
+					storage.put(bookmark);
+					Utilities.sendMessage(player, "The bookmark '" + bookmarkName + "' has been added.");
+					executed = true;
+				} else {
+					Utilities.sendMessage(player, "The bookmark '" + bookmarkName + "' already exists.");
+					executed = true;
+				}
 			}
 			
 		}
 		else if("remove".equals(action)) {
 			
 			if(args.length == 2) {
-				String bookmarkName = args[1].toLowerCase();
-				boolean deleted = storage.delete(Bookmark.class, Utilities.getBookmarkId(player.getName(), bookmarkName));
+				String bookmarkName = args[1];
+				
+				Bookmark bookmark = findBookmark(player, bookmarkName);
+
+				boolean deleted = storage.delete(bookmark);
 				
 				if(deleted) {
 					Utilities.sendMessage(player, "The bookmark '" + bookmarkName + "' has been removed.");
@@ -72,7 +82,7 @@ public class BookmarkExecutor extends DefaultCommandExecutor {
 				playerName = args[1];
 			}
 			
-			List<Bookmark> bookmarks = storage.query(Bookmark.class, "owner", playerName);
+			List<Bookmark> bookmarks = storage.query().with("owner", playerName.toLowerCase()).list(Bookmark.class);
 			
 			Collections.sort(bookmarks, new BookmarkComparator());
 			
@@ -96,8 +106,8 @@ public class BookmarkExecutor extends DefaultCommandExecutor {
 		else if("share".equals(action) || "hide".equals(action)) {
 			
 			if(args.length == 2) {
-				String bookmarkName = args[1].toLowerCase();
-				Bookmark bookmark = storage.get(Bookmark.class, Utilities.getBookmarkId(player.getName(), bookmarkName));
+				String bookmarkName = args[1];
+				Bookmark bookmark = findBookmark(player, bookmarkName);
 				
 				if(bookmark == null) {
 					Utilities.sendMessage(player, "The bookmark '" + bookmarkName + "' could not be found.");
@@ -118,10 +128,9 @@ public class BookmarkExecutor extends DefaultCommandExecutor {
 		
 		return executed;
 	}
-
-	@Override
-	public String getPermissionName() {
-		return "cylian.lock.*";
+	
+	protected Bookmark findBookmark(Player player, String bookmarkName) {
+		String playerName = player.getName().toLowerCase();
+		return storage.query().with("owner", playerName).with("name", bookmarkName).get(Bookmark.class);
 	}
-
 }

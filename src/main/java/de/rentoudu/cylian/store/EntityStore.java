@@ -27,9 +27,16 @@ public class EntityStore {
 	
 	public <E extends Entity> void put(E entity) {
 		YamlConfiguration entityStore = getStore(entity.getClass());
+		
+		if(entity.getId() == null || entity.getId().isEmpty()) {
+			entity.setId(createUniqeId());
+		} else {
+			delete(entity);
+		}
+
 		entityStore.createSection(
-			entity.getId(),
-			entity.getProperties()
+				entity.getId(),
+				entity.getProperties()
 		);
 	}
 	
@@ -44,6 +51,21 @@ public class EntityStore {
 		return false;
 	}
 	
+	public <E extends Entity> boolean delete(Entity entity) {
+		if(entity == null || entity.getId() == null || entity.getId().isEmpty()) {
+			return false;
+		}
+		
+		YamlConfiguration entityStore = getStore(entity.getClass());
+		
+		if(entityStore.contains(entity.getId())) {
+			entityStore.set(entity.getId(), null);
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public <E extends Entity> E get(Class<E> entityClass, String entityId) {
 		YamlConfiguration entityStore = getStore(entityClass);
 		
@@ -52,33 +74,31 @@ public class EntityStore {
 		return toEntity(entityClass, section);
 	}
 	
-	public <E extends Entity> boolean contains(Class<E> entityClass, String entityId) {
+	public <E extends Entity> List<E> list(Class<E> entityClass) {
 		YamlConfiguration entityStore = getStore(entityClass);
-		return entityStore.contains(entityId);
-	}
-	
-	public <E extends Entity> List<E> query(Class<E> entityClass, String propertyFilterName, String propertyFilterValue) {
-		ArrayList<E> entities = new ArrayList<E>();
 		
-		YamlConfiguration entityStore = getStore(entityClass);
+		List<E> entities = new ArrayList<E>();
 		
 		if(entityStore == null) {
 			return entities;
 		}
 		
-		Set<String> entityKeys = entityStore.getKeys(false);
-		
-		for(String entityKey : entityKeys) {
-			String propertySection = entityKey + "." + propertyFilterName;
-			
-			if(propertyFilterValue.equals(entityStore.getString(propertySection))) {
-				E entity = toEntity(entityClass, entityStore.getConfigurationSection(entityKey));
-				entities.add(entity);
-			}
-			
+		for(String key : entityStore.getKeys(false)) {
+			ConfigurationSection section = entityStore.getConfigurationSection(key);
+			E entity = toEntity(entityClass, section);
+			entities.add(entity);
 		}
 		
 		return entities;
+	}
+	
+	public <E extends Entity> boolean contains(Class<E> entityClass, String entityId) {
+		YamlConfiguration entityStore = getStore(entityClass);
+		return entityStore.contains(entityId);
+	}
+	
+	public EntityStoreQuery query() {
+		return EntityStoreQuery.fromStore(this);
 	}
 	
 	protected <E extends Entity> E toEntity(Class<E> entityClass, ConfigurationSection section) {
@@ -87,6 +107,8 @@ public class EntityStore {
 		if(section != null) {
 			try {
 				instantiatedEntity = entityClass.newInstance();
+				
+				instantiatedEntity.setId(section.getName());
 				
 				Set<String> keys = section.getKeys(false);
 				for(String key : keys) {
@@ -131,6 +153,10 @@ public class EntityStore {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private String createUniqeId() {
+		return String.valueOf(System.currentTimeMillis());
 	}
 	
 }
